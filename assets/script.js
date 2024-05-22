@@ -1,9 +1,9 @@
 const apiKey = `ff75f3cbfa0c9aa6133e938e9de896a8`;
-const limit = `5`;
+// const limit = `1`;
 
 function getLocation() {
     const citySearch = document.getElementById('searchBar').value;
-    const reqLocUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${citySearch}&limit=${limit}&appid=${apiKey}`;
+    const reqLocUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${citySearch}&appid=${apiKey}`;
 
     fetch(reqLocUrl)
     .then(function(response) {
@@ -11,32 +11,41 @@ function getLocation() {
     })
     .then(function (data) {
         console.log(data);
+
+        const location = {
+            lat: data[0].lat,
+            lon: data[0].lon
+        }
+        console.log(location);
+
+        getWeather(location.lat, location.lon)
     })
     .catch(function(error) {
         console.log('Error fetching location data:', error);
     });
    
 }
-//     .then(function (location) {
-//         const locations = location[0];
-//         console.log(locations)
-//       })
-    
-// }
 
-// function getWeather() {
-//     const reqWetUrl = "http://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={ff75f3cbfa0c9aa6133e938e9de896a8}"
+function getWeather(lat, lon) {
+    const locLat = lat;
+    const locLon = lon;
+    const reqWetUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${locLat}&lon=${locLon}&appid=${apiKey}`;
 
-//     fetch(reqWetUrl)
-//     .then(function (response) {
-//         console.log(response);
-//       return response.json();
-//     })
-//     .then(function (weather) {
-//       console.log(weather);
-//     })  
-// }
+    fetch(reqWetUrl)
+    .then(function (response) {
+        return response.json();
+    })
+    .then(function (data) {
+      console.log(data);
+
+      const weatherData = {
+        cityId: data.city.id,
+        cityName: data.city.name,
+
+
+      }
+      console.log(weatherData);
+    })  
+}
 
 document.getElementById('searchButton').addEventListener("click", getLocation);
-
-// http://api.openweathermap.org/geo/1.0/direct?q=Tallahassee&limit=5&appid=ff75f3cbfa0c9aa6133e938e9de896a8
