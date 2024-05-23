@@ -1,5 +1,8 @@
 const apiKey = `ff75f3cbfa0c9aa6133e938e9de896a8`;
-// const limit = `1`;
+
+function placeHolderWeather () {
+   
+}
 
 function getLocation() {
     const citySearch = document.getElementById('searchBar').value;
@@ -69,46 +72,53 @@ function futureWeather(lat, lon) {
     })
     .then(function (data) {
       console.log(data);
+      const dayOne = new Date(data.list[4].dt * 1000);
+      const dayTwo = new Date(data.list[12].dt * 1000);
+      const dayThree = new Date(data.list[20].dt * 1000); 
+      const dayFour = new Date(data.list[28].dt * 1000);
+      const dayFive = new Date(data.list[36].dt * 1000);
+      
 
       const dayOneWeather = {
-        date: data.list[0].dt_txt,
-        icon: '',
-        temp: '',
-        wind: '',
-        humidity: ''
+        date: `${dayOne.getMonth() + 1}/${dayOne.getDate()}/${dayOne.getFullYear()}`,
+        icon: data.list[4].weather[0].icon,
+        temp: `${Math.round((data.list[4].main.temp + 32))} °F`,
+        wind: `${data.list[4].wind.speed} mph`,
+        humidity: `${data.list[4].main.humidity} %`
       }
       const dayTwoWeather = {
-        date: data.list[0].dt_txt,
-        icon: '',
-        temp: '',
-        wind: '',
-        humidity: ''
+        date: `${dayTwo.getMonth() + 1}/${dayTwo.getDate()}/${dayTwo.getFullYear()}`,
+        icon: data.list[12].weather[0].icon,
+        temp: `${Math.round((data.list[12].main.temp + 32))} °F`,
+        wind: `${data.list[12].wind.speed} mph`,
+        humidity: `${data.list[12].main.humidity} %`
       }
       const dayThreeWeather = {
-        date: data.list[0].dt_txt,
-        icon: '',
-        temp: '',
-        wind: '',
-        humidity: ''
+        date: `${dayThree.getMonth() + 1}/${dayThree.getDate()}/${dayThree.getFullYear()}`,
+        icon: data.list[20].weather[0].icon,
+        temp: `${Math.round((data.list[20].main.temp + 32))} °F`,
+        wind: `${data.list[20].wind.speed} mph`,
+        humidity: `${data.list[20].main.humidity} %`
       }
       const dayFourWeather = {
-        date: data.list[0].dt_txt,
-        icon: '',
-        temp: '',
-        wind: '',
-        humidity: ''
+        date: `${dayFour.getMonth() + 1}/${dayFour.getDate()}/${dayFour.getFullYear()}`,
+        icon: data.list[28].weather[0].icon,
+        temp: `${Math.round((data.list[28].main.temp + 32))} °F`,
+        wind: `${data.list[28].wind.speed} mph`,
+        humidity: `${data.list[28].main.humidity} %`
       }
       const dayFiveWeather = {
-        date: data.list[0].dt_txt,
-        icon: '',
-        temp: '',
-        wind: '',
-        humidity: ''
+        date: `${dayFive.getMonth() + 1}/${dayFive.getDate()}/${dayFive.getFullYear()}`,
+        icon: data.list[36].weather[0].icon,
+        temp: `${Math.round((data.list[36].main.temp + 32))} °F`,
+        wind: `${data.list[36].wind.speed} mph`,
+        humidity: `${data.list[36].main.humidity} %`
       }
-      console.log(currentWeather);
       let fiveDaysArr = [dayOneWeather, dayTwoWeather, dayThreeWeather, dayFourWeather, dayFiveWeather];
+      console.log(fiveDaysArr);
       return fiveDaysArr;
-    })  
+    })
+      
 }
 
 document.getElementById('searchButton').addEventListener("click", getLocation);
