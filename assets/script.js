@@ -1,12 +1,8 @@
 const apiKey = `ff75f3cbfa0c9aa6133e938e9de896a8`;
 
-function placeHolderWeather () {
-   
-}
 
-function getLocation() {
-    const citySearch = document.getElementById('searchBar').value;
-    const reqLocUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${citySearch}&appid=${apiKey}`;
+function getLocation(cityName) {
+    const reqLocUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName}&appid=${apiKey}`;
 
     fetch(reqLocUrl)
     .then(function(response) {
@@ -43,7 +39,6 @@ function currentWeather(lat, lon) {
         return response.json();
     })
     .then(function (data) {
-      console.log(data);
 
       const timestamp = data.dt;
       const date = new Date(timestamp * 1000);
@@ -71,7 +66,6 @@ function futureWeather(lat, lon) {
         return response.json();
     })
     .then(function (data) {
-      console.log(data);
       const dayOne = new Date(data.list[4].dt * 1000);
       const dayTwo = new Date(data.list[12].dt * 1000);
       const dayThree = new Date(data.list[20].dt * 1000); 
@@ -120,5 +114,17 @@ function futureWeather(lat, lon) {
     })
       
 }
+function searchLocation() {
+    const citySearch = document.getElementById('searchBar').value;
+    getLocation(citySearch);
+}
 
-document.getElementById('searchButton').addEventListener("click", getLocation);
+function placeHolderWeather() {
+    const defaultCity = 'New York';
+    getLocation(defaultCity);
+}
+
+// Call the placeHolderWeather function on page load
+window.onload = placeHolderWeather;
+
+document.getElementById('searchButton').addEventListener("click", searchLocation);
