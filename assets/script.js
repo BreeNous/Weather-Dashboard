@@ -39,22 +39,36 @@ function currentWeather(lat, lon) {
         return response.json();
     })
     .then(function (data) {
-
+        
       const timestamp = data.dt;
       const date = new Date(timestamp * 1000);
-    
-      const currentWeather = {
-        cityName: data.name,
-        date: `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`,
-        icon: data.weather[0].icon,
-        temp: `${Math.round((data.main.temp + 32))} °F`,
-        wind: `${data.wind.speed} mph`,
-        humidity: `${data.main.humidity} %`
-      }
-      console.log(currentWeather);
-      return currentWeather
+
+      const todaysFc = document.getElementById('nowWeather');
+      const todayHeader = document.createElement('div')
+      todaysFc.appendChild(todayHeader);
+
+      const todayCityAndDate = document.createElement('h2');
+      todayCityAndDate.textContent = `${data.name} ${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`
+      todayHeader.appendChild(todayCityAndDate);
+
+
+      const todayBody = document.createElement('div');
+      todaysFc.appendChild(todayBody);
+
+      const todayTemp = document.createElement('h3');
+      todayTemp.textContent = `Temp: ${Math.round((data.main.temp + 32))} °F`;
+      todayBody.appendChild(todayTemp);
+
+      const todayWind = document.createElement('h3');
+      todayWind.textContent = `Wind ${data.wind.speed} mph`;
+      todayBody.appendChild(todayWind);
+      
+      const todayHum = document.createElement('h3');
+      todayHum.textContent = `Humidity: ${data.main.humidity} %`;
+      todayBody.appendChild(todayHum);
+
     })
-};    
+};  
 
 function futureWeather(lat, lon) {
     const locLat = lat;
@@ -66,12 +80,12 @@ function futureWeather(lat, lon) {
         return response.json();
     })
     .then(function (data) {
+        console.log(data)
       const dayOne = new Date(data.list[4].dt * 1000);
       const dayTwo = new Date(data.list[12].dt * 1000);
       const dayThree = new Date(data.list[20].dt * 1000); 
       const dayFour = new Date(data.list[28].dt * 1000);
       const dayFive = new Date(data.list[36].dt * 1000);
-      
 
       const dayOneWeather = {
         date: `${dayOne.getMonth() + 1}/${dayOne.getDate()}/${dayOne.getFullYear()}`,
@@ -112,6 +126,31 @@ function futureWeather(lat, lon) {
       console.log(fiveDaysArr);
       return fiveDaysArr;
     })
+    .then(function(array) {
+
+        for(const days of array) {
+            const fiveDays = document.getElementById('nowWeather2');
+            const futWeather = document.createElement('div');
+            fiveDays.appendChild(futWeather);
+
+            const futDate = document.createElement('h3')
+            futDate.textContent = days.date;
+            futWeather.appendChild(futDate);
+
+            const futTemp = document.createElement('h4');
+            futTemp.textContent = `Temp: ${days.temp}`;
+            futWeather.appendChild(futTemp);
+
+            const futWind = document.createElement('h4');
+            futWind.textContent = `Wind: ${days.wind}`;
+            futWeather.appendChild(futWind);
+
+            const futHum = document.createElement('h4');
+            futHum.textContent = `Humidity: ${days.humidity}`;
+            futWeather.appendChild(futHum);
+        }
+    })
+
       
 }
 function searchLocation() {
