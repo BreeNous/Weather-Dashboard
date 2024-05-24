@@ -1,9 +1,36 @@
 const apiKey = `ff75f3cbfa0c9aa6133e938e9de896a8`;
 
+// Function to render the search history on the page
+function renderSearchHistory() {
+    const searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
+    const container = document.getElementById('history');
+    container.innerHTML = ''; // Clear the container first
+
+    searchHistory.forEach(cityName => {
+        const itemButton = document.createElement('button'); // Create a button element
+        itemButton.textContent = cityName; // Set the button text to the city name
+        itemButton.classList.add('search-history-item'); // Add a class for styling
+        container.appendChild(itemButton);
+
+        // Attach a click event listener to each button
+        itemButton.addEventListener('click', function() {
+            getLocation(cityName); // Trigger getLocation with the city name when the button is clicked
+        });
+    });
+}
+
+
 
 function getLocation(cityName) {
     const reqLocUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName}&appid=${apiKey}`;
 
+    let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
+
+    if (!searchHistory.includes(cityName)) {
+        searchHistory.push(cityName);
+        localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+        renderSearchHistory();
+    }
     fetch(reqLocUrl)
     .then(function(response) {
         return response.json();
@@ -168,7 +195,9 @@ function placeHolderWeather() {
     getLocation(defaultCity);
 }
 
-// Call the placeHolderWeather function on page load
-window.onload = placeHolderWeather;
+window.onload = function() {
+    placeHolderWeather();
+    renderSearchHistory();
+};
 
 document.getElementById('searchButton').addEventListener("click", searchLocation);
